@@ -8,7 +8,7 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const socketInstance = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000', {
+    const socketInstance = io(process.env.NEXT_PUBLIC_API_URL || 'https://googledocs-backend-smh1.onrender.com', {
       withCredentials: true,
       path: '/socket.io/',
       transports: ['websocket', 'polling'],
