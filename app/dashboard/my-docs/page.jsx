@@ -1,40 +1,39 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { useAuth } from '../../_context/AuthContext'
-import  api  from '../../_lib/api'
-import DocumentList from '../../_components/DocumentList'
-import Link from 'next/link'
+"use client";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../_context/AuthContext";
+import api from "../../_lib/api";
+import DocumentList from "../../_components/DocumentList";
+import Link from "next/link";
 
 export default function MyDocumentsPage() {
-  const { user } = useAuth()
-  const [documents, setDocuments] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
+  const { user } = useAuth();
+  const [documents, setDocuments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchDocuments = async () => {
       try {
-        const response = await api.get('/documents')
-      setDocuments(response.data.data.ownedDocuments)
-
+        const response = await api.get("/documents");
+        setDocuments(response.data.data.ownedDocuments);
       } catch (err) {
-        setError('Failed to fetch documents')
+        setError("Failed to fetch documents");
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    if (user) fetchDocuments()
-  }, [user])
+    if (user) fetchDocuments();
+  }, [user]);
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/documents/${id}`)
-      setDocuments(documents.filter(doc => doc._id !== id))
+      await api.delete(`/documents/${id}`);
+      setDocuments(documents.filter((doc) => doc._id !== id));
     } catch (err) {
-      setError('Failed to delete document')
+      setError("Failed to delete document");
     }
-  }
+  };
 
   return (
     <div>
@@ -42,10 +41,9 @@ export default function MyDocumentsPage() {
         <h2 className="text-2xl font-bold text-gray-800">My Documents</h2>
         <Link
           href="/editor/new"
-          className="px-4 py-2 bg-primary-500 
-					 rounded-md hover:bg-primary-600"
+          className="inline-block px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
         >
-          New Document
+          + New Document
         </Link>
       </div>
 
@@ -60,12 +58,12 @@ export default function MyDocumentsPage() {
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
         </div>
       ) : (
-        <DocumentList 
-          documents={documents} 
-          onDelete={handleDelete} 
+        <DocumentList
+          documents={documents}
+          onDelete={handleDelete}
           showOwner={false}
         />
       )}
     </div>
-  )
+  );
 }

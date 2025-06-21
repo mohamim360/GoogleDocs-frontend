@@ -16,7 +16,7 @@ export default function DashboardLayout({ children }) {
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white shadow-sm">
           <div className="px-4 py-4 sm:px-6 lg:px-8">
-            <h1 className="text-xl font-semibold text-gray-900">Google Docs Clone</h1>
+            <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
           </div>
         </header>
         
