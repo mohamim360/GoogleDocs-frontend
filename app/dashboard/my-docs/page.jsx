@@ -15,7 +15,8 @@ export default function MyDocumentsPage() {
     const fetchDocuments = async () => {
       try {
         const response = await api.get('/documents')
-        setDocuments(response.data.ownedDocuments)
+      setDocuments(response.data.data.ownedDocuments)
+
       } catch (err) {
         setError('Failed to fetch documents')
       } finally {

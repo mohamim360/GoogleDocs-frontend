@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../_context/AuthContext'
-import  api  from '../../_lib/api'
+import api from '../../_lib/api'
 import DocumentList from '../../_components/DocumentList'
 
 export default function SharedDocumentsPage() {
@@ -14,8 +14,13 @@ export default function SharedDocumentsPage() {
     const fetchSharedDocuments = async () => {
       try {
         const response = await api.get('/documents')
-        setSharedDocs(response.data.sharedDocuments)
+        console.log('API Response:', response.data) // Debug log
+        
+        // Handle the shared documents data structure
+        const docs = response.data.data?.sharedDocuments || []
+        setSharedDocs(docs)
       } catch (err) {
+        console.error('Fetch error:', err)
         setError('Failed to fetch shared documents')
       } finally {
         setIsLoading(false)
@@ -24,7 +29,14 @@ export default function SharedDocumentsPage() {
 
     if (user) fetchSharedDocuments()
   }, [user])
-
+	const handleDelete = async (id) => {
+		try {
+			await api.delete(`/documents/${id}`)
+			setDocuments(documents.filter(doc => doc._id !== id))
+		} catch (err) {
+			setError('Failed to delete document')
+		}
+	}
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Shared Documents</h2>
@@ -41,8 +53,11 @@ export default function SharedDocumentsPage() {
         </div>
       ) : (
         <DocumentList 
-          documents={sharedDocs.map(doc => doc.document)} 
+          documents={sharedDocs.map(sd => sd.document).filter(Boolean)} 
           showOwner={true}
+					   onDelete={handleDelete}
+          sharedInfo={sharedDocs}
+					 isSharedPage={true}  // Pass the full shared info if needed
         />
       )}
     </div>

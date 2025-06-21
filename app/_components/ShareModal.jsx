@@ -110,7 +110,7 @@ const ShareModal = ({ isOpen, onClose, onShare, error, success }) => {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
+                      className={`px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${
                         isLoading ? 'opacity-70 cursor-not-allowed' : ''
                       }`}
                     >

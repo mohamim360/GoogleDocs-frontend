@@ -1,5 +1,4 @@
 'use client';
-
 import { createContext, useContext, useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
@@ -9,14 +8,28 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    const newSocket = io(process.env.NEXT_PUBLIC_API_URL, {
+    const socketInstance = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000', {
       withCredentials: true,
-      autoConnect: false
+      path: '/socket.io/',
+      transports: ['websocket', 'polling'],
+      autoConnect: true,
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000
     });
-    setSocket(newSocket);
+
+    socketInstance.on('connect', () => {
+      console.log('Socket connected:', socketInstance.id);
+    });
+
+    socketInstance.on('connect_error', (err) => {
+      console.error('Socket connection error:', err);
+    });
+
+    setSocket(socketInstance);
 
     return () => {
-      newSocket.disconnect();
+      socketInstance.disconnect();
     };
   }, []);
 
@@ -27,6 +40,4 @@ export const SocketProvider = ({ children }) => {
   );
 };
 
-export const useSocket = () => {
-  return useContext(SocketContext);
-};
+export const useSocket = () => useContext(SocketContext);
